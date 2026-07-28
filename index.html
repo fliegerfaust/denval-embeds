@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ДенВал.Класс — интерактивные разборы</title>
+<style>
+  :root {
+    --bg: oklch(0.977 0.006 290);
+    --card: oklch(1 0 0);
+    --fg: oklch(0.235 0.028 288);
+    --muted: oklch(0.495 0.028 288);
+    --border: oklch(0.905 0.016 290);
+    --primary: oklch(0.545 0.272 288);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: oklch(0.165 0.020 288);
+      --card: oklch(0.212 0.024 288);
+      --fg: oklch(0.965 0.006 290);
+      --muted: oklch(0.720 0.022 288);
+      --border: oklch(1 0 0 / 0.10);
+      --primary: oklch(0.660 0.215 288);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: clamp(20px, 5vw, 56px);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.011em; color: var(--fg); background: var(--bg);
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: clamp(1.4rem, 3vw, 1.75rem); font-weight: 800;
+       letter-spacing: -0.022em; margin: 0 0 6px; }
+  .lead { color: var(--muted); margin: 0 0 28px; font-size: 15px; }
+  .card { background: var(--card); border: 1px solid var(--border);
+          border-radius: 18px; padding: 20px; margin-bottom: 14px; }
+  .card h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.018em;
+             margin: 0 0 4px; }
+  .card p { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  a.open, button.copy {
+    font: inherit; font-size: 14px; font-weight: 600; height: 38px;
+    padding: 0 16px; border-radius: 9999px; border: 1px solid var(--border);
+    background: var(--card); color: var(--fg); cursor: pointer;
+    display: inline-flex; align-items: center; text-decoration: none;
+  }
+  a.open { background: var(--primary); border-color: transparent; color: #fff; }
+  code { font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+         display: block; background: var(--bg); border: 1px solid var(--border);
+         border-radius: 12px; padding: 12px; margin-top: 12px;
+         overflow-x: auto; white-space: pre; color: var(--muted); }
+  footer { color: var(--muted); font-size: 13px; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Интерактивные разборы</h1>
+  <p class="lead">Страницы для вставки на онлайн-доску или в урок. Каждая работает
+    сама по себе: ни одного запроса в сеть, шрифты внутри файла.</p>
+
+  <section class="card">
+    <h2>Задача 8.6 — сечение правильной треугольной призмы</h2>
+    <p>Семь шагов построения, вращение фигуры мышкой, истинный вид сечения.</p>
+    <div class="row">
+      <a class="open" href="stereo-8-6.html">Открыть</a>
+      <button class="copy" type="button" data-file="stereo-8-6.html">Скопировать код для доски</button>
+    </div>
+    <code id="snippet-stereo-8-6"></code>
+  </section>
+
+  <footer>Обновляется из репозитория <code style="display:inline;border:0;padding:0;background:none">denval-embeds</code>.</footer>
+</main>
+<script>
+  const code = (file) =>
+    '<iframe src="' + new URL(file, location.href).href + '"\n' +
+    '        style="width:100%;height:760px;border:0;border-radius:16px"\n' +
+    '        title="Интерактивный разбор"></iframe>';
+
+  for (const btn of document.querySelectorAll(".copy")) {
+    const file = btn.dataset.file;
+    document.getElementById("snippet-" + file.replace(".html", "")).textContent = code(file);
+    btn.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(code(file));
+      const was = btn.textContent;
+      btn.textContent = "Скопировано";
+      setTimeout(() => (btn.textContent = was), 1600);
+    });
+  }
+</script>
+</body>
+</html>
